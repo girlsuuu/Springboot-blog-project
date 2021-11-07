@@ -19,10 +19,6 @@ public class Result implements Serializable {
     return success(400, msg, null);
   }
 
-  public static Result fail(String msg, Object data){
-    return fail(400, msg, data);
-  }
-
   public static Result success(int code, String msg, Object data){
     Result r = new Result();
     r.setCode(code);
@@ -31,12 +27,21 @@ public class Result implements Serializable {
     return r;
   }
 
-  public static Result fail(int code, String msg, Object data){
+  public static Result fail(String msg) {
+    return fail(400, msg, null);
+  }
+
+  public static Result fail(String msg, Object data) {
+    return fail(400, msg, data);
+  }
+
+  public static Result fail(int code, String msg, Object data) {
     Result r = new Result();
     r.setCode(code);
-    r.setData(data);
     r.setMsg(msg);
+    r.setData(data);
     return r;
   }
+
 
 }

@@ -2,6 +2,7 @@ package com.blog.config;
 
 import com.blog.shiro.AccountRealm;
 //import com.blog.shiro.JwtFilter;
+import com.blog.shiro.JwtFilter;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -23,8 +24,8 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
-//  @Autowired
-//  private JwtFilter jwtFilter;
+  @Autowired
+  private JwtFilter jwtFilter;
 
   @Bean
   public SessionManager sessionManager(RedisSessionDAO redisSessionDAO) {
@@ -56,7 +57,7 @@ public class ShiroConfig {
 
     Map<String, String> filterMap = new LinkedHashMap<>();
 
-    filterMap.put("/**", "authc");
+    filterMap.put("/**", "jwt");
     chainDefinition.addPathDefinitions(filterMap);
     return chainDefinition;
   }
@@ -67,14 +68,15 @@ public class ShiroConfig {
     ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
     shiroFilter.setSecurityManager(securityManager);
 
-//    Map<String, Filter> filters = new HashMap<>();
-//    filters.put("jwt", jwtFilter);
-//    shiroFilter.setFilters(filters);
+    Map<String, Filter> filters = new HashMap<>();
+    filters.put("jwt", jwtFilter);
+    shiroFilter.setFilters(filters);
 
     Map<String, String> filterMap = shiroFilterChainDefinition.getFilterChainMap();
 
     shiroFilter.setFilterChainDefinitionMap(filterMap);
     return shiroFilter;
   }
+
 
 }
