@@ -1,11 +1,16 @@
 package com.blog.shiro;
 
 
+import cn.hutool.core.bean.BeanUtil;
+import com.blog.entity.User;
 import com.blog.service.UserService;
 import com.blog.util.JwtUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -35,6 +40,21 @@ public class AccountRealm extends AuthorizingRealm {
   protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
       throws AuthenticationException {
     JwtToken jwtToken = (JwtToken) token;
-    return null;
+
+    String userId = jwtUtils.getClaimByToken((String) jwtToken.getPrincipal()).getSubject();
+
+    User user = userService.getById(Long.valueOf(userId));
+    if (user == null) {
+      throw new UnknownAccountException("账户不存在");
+    }
+
+    if (user.getStatus() == -1) {
+      throw new LockedAccountException("账户已被锁定");
+    }
+
+    AccountProfile profile = new AccountProfile();
+    BeanUtil.copyProperties(user, profile);
+
+    return new SimpleAuthenticationInfo(profile, jwtToken.getCredentials(), getName());
   }
 }
