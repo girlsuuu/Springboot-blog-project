@@ -3,6 +3,7 @@ package com.blog.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
@@ -39,7 +40,7 @@ public class Blog implements Serializable {
 
     @NotNull(message = "内容不能为空")
     private String content;
-
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private LocalDateTime created;
 
     private Integer status;

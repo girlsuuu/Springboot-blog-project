@@ -18,7 +18,7 @@ markerhub:
     expire: 604800
     header: Authorization
 
-#shiro-redis:
-#  enabled: true
-#  redis-manager:
-#    127.0.0.1:6379
+shiro-redis:
+  enabled: true
+  redis-manager:
+    127.0.0.1:6379
