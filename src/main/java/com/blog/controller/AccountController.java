@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.blog.common.dto.LoginDto;
 import com.blog.common.lang.Result;
 import com.blog.entity.User;
@@ -11,6 +12,7 @@ import com.blog.service.UserService;
 import com.blog.util.JwtUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import netscape.security.UserTarget;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +47,30 @@ public class AccountController {
     return Result.success(MapUtil.builder()
         .put("id", user.getId())
         .put("username", user.getUsername())
+        .put("avatar", user.getAvatar())
         .map()
     );
+  }
+
+  @PostMapping("/signUp")
+  public Result signUp(@Validated @RequestBody LoginDto loginDto) {
+    if(loginDto.getUsername().equals("") || loginDto.getUsername()==null){
+      return Result.fail("用户名不能为空");
+    }
+    if(loginDto.getPassword().equals("") || loginDto.getPassword()==null){
+      return Result.fail("密码不能为空");
+    }
+    User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
+    if(user != null){
+      return Result.fail("用户已存在");
+    }
+    //存用户
+    User userToSave = new User();
+    userToSave.setUsername(loginDto.getUsername());
+    userToSave.setPassword(SecureUtil.md5(loginDto.getPassword()));
+    userService.save(userToSave);
+
+    return Result.success("注册成功");
   }
 
   @RequiresAuthentication

@@ -10,7 +10,6 @@ import com.blog.entity.Blog;
 import com.blog.service.BlogService;
 import com.blog.util.ShiroUtil;
 import java.time.LocalDateTime;
-import org.apache.ibatis.executor.loader.ResultLoader;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,14 +40,13 @@ public class BlogController {
   public Result list(@RequestParam(defaultValue = "1") Integer currentPage){
     Page page = new Page(currentPage, 5);
     IPage pageData = blogService.page(page, new QueryWrapper<Blog>().orderByDesc("created"));
-
     return Result.success(pageData);
   }
 
   @GetMapping("blog/{id}")
   public Result detail(@PathVariable(name = "id") Long id){
     Blog blog = blogService.getById(id);
-    Assert.notNull(blog, "该博客已被删除");
+    Assert.notNull(blog, "该博客不存在");
 
     return Result.success(blog);
   }

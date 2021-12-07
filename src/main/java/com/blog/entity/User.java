@@ -3,8 +3,8 @@ package com.blog.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
@@ -27,6 +27,13 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public User() {
+        this.avatar = "";
+        this.status = 0;
+        this.created = new Date();
+        this.lastLogin = null;
+    }
+
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
@@ -35,7 +42,7 @@ public class User implements Serializable {
 
     private String avatar;
 
-    @NotNull(message = "邮箱不能为空")
+    //@NotNull(message = "邮箱不能为空")
     @Email(message = "邮箱格式不正确")
     private String email;
 
@@ -43,9 +50,9 @@ public class User implements Serializable {
 
     private Integer status;
 
-    private LocalDateTime created;
+    private Date created;
 
-    private LocalDateTime lastLogin;
+    private Date lastLogin;
 
 
 }
