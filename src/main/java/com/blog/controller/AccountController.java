@@ -6,6 +6,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.blog.common.dto.LoginDto;
+import com.blog.common.dto.SignUpDto;
 import com.blog.common.lang.Result;
 import com.blog.entity.User;
 import com.blog.service.UserService;
@@ -53,21 +54,25 @@ public class AccountController {
   }
 
   @PostMapping("/signUp")
-  public Result signUp(@Validated @RequestBody LoginDto loginDto) {
-    if(loginDto.getUsername().equals("") || loginDto.getUsername()==null){
+  public Result signUp(@Validated @RequestBody SignUpDto signUpDto) {
+    if(signUpDto.getUsername().equals("") || signUpDto.getUsername()==null){
       return Result.fail("用户名不能为空");
     }
-    if(loginDto.getPassword().equals("") || loginDto.getPassword()==null){
+    if(signUpDto.getPassword().equals("") || signUpDto.getPassword()==null){
       return Result.fail("密码不能为空");
     }
-    User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
+    if(signUpDto.getEmail().equals("") || signUpDto.getEmail()==null){
+      return Result.fail("邮箱不能为空");
+    }
+    User user = userService.getOne(new QueryWrapper<User>().eq("username", signUpDto.getUsername()));
     if(user != null){
       return Result.fail("用户已存在");
     }
     //存用户
     User userToSave = new User();
-    userToSave.setUsername(loginDto.getUsername());
-    userToSave.setPassword(SecureUtil.md5(loginDto.getPassword()));
+    userToSave.setUsername(signUpDto.getUsername());
+    userToSave.setPassword(SecureUtil.md5(signUpDto.getPassword()));
+    userToSave.setEmail(signUpDto.getEmail());
     userService.save(userToSave);
 
     return Result.success("注册成功");
