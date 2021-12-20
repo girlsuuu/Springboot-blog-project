@@ -10,6 +10,8 @@ import com.blog.entity.Blog;
 import com.blog.service.BlogService;
 import com.blog.util.ShiroUtil;
 import java.time.LocalDateTime;
+import java.util.List;
+import javax.swing.text.html.parser.Entity;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -43,6 +45,15 @@ public class BlogController {
 
     return Result.success(blog);
   }
+
+  @PostMapping("blog/search")
+  public Result search(@Validated @RequestBody String text){
+    QueryWrapper<Blog> wrapper = new QueryWrapper<>();
+    wrapper.like("title", text);
+    List<Blog> blogs = blogService.list(wrapper);
+    return Result.success(blogs);
+  }
+
 
   @RequiresAuthentication
   @PostMapping("blog/edit")

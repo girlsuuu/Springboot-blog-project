@@ -17,11 +17,10 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName(value = "comment",autoResultMap = true)
+@TableName(value = "comment", autoResultMap = true)
 public class Comment implements Serializable {
 
   private static final long serialVersionUID = 1L;
-
 
   @TableId(value = "id", type = IdType.AUTO)
   private Long id;
