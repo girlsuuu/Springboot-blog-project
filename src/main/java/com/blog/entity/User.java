@@ -54,5 +54,7 @@ public class User implements Serializable {
 
     private Date lastLogin;
 
+    private Integer isAdmin;
+
 
 }

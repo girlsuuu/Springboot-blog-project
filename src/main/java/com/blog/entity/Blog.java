@@ -44,4 +44,5 @@ public class Blog implements Serializable {
     private Integer status;
 
 
+
 }

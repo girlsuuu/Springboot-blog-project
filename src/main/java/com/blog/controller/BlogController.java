@@ -34,15 +34,19 @@ public class BlogController {
   @GetMapping("blogs")
   public Result list(@RequestParam(defaultValue = "1") Integer currentPage){
     Page page = new Page(currentPage, 5);
-    IPage pageData = blogService.page(page, new QueryWrapper<Blog>().orderByDesc("created"));
+    QueryWrapper<Blog> wrapper = new QueryWrapper<>();
+    wrapper.eq("status", 1);
+    IPage pageData = blogService.page(page, wrapper.orderByDesc("created"));
     return Result.success(pageData);
   }
 
   @GetMapping("blog/{id}")
-  public Result detail(@PathVariable(name = "id") Long id){
+  public Result detail(@PathVariable(name = "id") Long id) throws Exception {
     Blog blog = blogService.getById(id);
     Assert.notNull(blog, "该博客不存在");
-
+    if(blog.getStatus() == 0){
+      return Result.fail("博客不存在");
+    }
     return Result.success(blog);
   }
 
@@ -79,5 +83,18 @@ public class BlogController {
 
     return Result.success(null);
   }
+
+//  @RequiresAuthentication
+  @GetMapping("blog/delete/{id}")
+  public Result edit(@PathVariable(name = "id") Long id){
+
+    Blog temp = blogService.getById(id);
+
+    temp.setStatus(0);
+    blogService.saveOrUpdate(temp);
+
+    return Result.success(null);
+  }
+
 
 }
