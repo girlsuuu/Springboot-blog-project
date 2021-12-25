@@ -1,7 +1,6 @@
 package com.blog.config;
 
 import com.blog.shiro.AccountRealm;
-//import com.blog.shiro.JwtFilter;
 import com.blog.shiro.JwtFilter;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;

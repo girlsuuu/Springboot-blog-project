@@ -10,8 +10,9 @@ import com.blog.entity.Blog;
 import com.blog.service.BlogService;
 import com.blog.util.ShiroUtil;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
-import javax.swing.text.html.parser.Entity;
+import javax.xml.crypto.Data;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -21,11 +22,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@RequestMapping(produces = "application/json;charset=UTF-8")
 public class BlogController {
 
   @Autowired
@@ -67,7 +70,6 @@ public class BlogController {
     if(blog.getId() != null) {
       temp = blogService.getById(blog.getId());
       // 只能编辑自己的文章
-      System.out.println(ShiroUtil.getProfile().getId());
       Assert.isTrue(temp.getUserId().longValue() == ShiroUtil.getProfile().getId().longValue(), "没有权限编辑");
 
     } else {
@@ -75,10 +77,9 @@ public class BlogController {
       temp = new Blog();
       temp.setUserId(ShiroUtil.getProfile().getId());
       temp.setCreated(LocalDateTime.now());
-      temp.setStatus(0);
     }
 
-    BeanUtil.copyProperties(blog, temp, "id", "userId", "created", "status");
+    BeanUtil.copyProperties(blog, temp, "id", "userId", "created");
     blogService.saveOrUpdate(temp);
 
     return Result.success(null);
