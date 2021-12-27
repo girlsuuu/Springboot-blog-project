@@ -1,6 +1,7 @@
 package com.blog.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.blog.common.lang.Result;
 import com.blog.entity.User;
 import com.blog.service.UserService;
@@ -39,6 +40,17 @@ public class UserController {
 
   @PostMapping("/save")
   public Object save(@Validated @RequestBody User user){
+
+    return Result.success(user);
+  }
+
+  @GetMapping("/getUserByName/{username}")
+  public Object getUserByName(@PathVariable(name = "username") String username){
+
+    QueryWrapper<User> wrapper = new QueryWrapper<>();
+    wrapper.eq("username", username);
+
+    User user = userService.getOne(wrapper);
 
     return Result.success(user);
   }

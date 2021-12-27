@@ -7,12 +7,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.common.lang.Result;
 import com.blog.entity.Blog;
+import com.blog.entity.Record;
 import com.blog.service.BlogService;
+import com.blog.service.RecordService;
 import com.blog.util.ShiroUtil;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import javax.xml.crypto.Data;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -33,6 +33,9 @@ public class BlogController {
 
   @Autowired
   BlogService blogService;
+
+  @Autowired
+  RecordService recordService;
 
   @GetMapping("blogs")
   public Result list(@RequestParam(defaultValue = "1") Integer currentPage){
@@ -70,7 +73,7 @@ public class BlogController {
     if(blog.getId() != null) {
       temp = blogService.getById(blog.getId());
       // 只能编辑自己的文章
-      Assert.isTrue(temp.getUserId().longValue() == ShiroUtil.getProfile().getId().longValue(), "没有权限编辑");
+//      Assert.isTrue(temp.getUserId().longValue() == ShiroUtil.getProfile().getId().longValue(), "没有权限编辑");
 
     } else {
 
@@ -85,7 +88,7 @@ public class BlogController {
     return Result.success(null);
   }
 
-//  @RequiresAuthentication
+  @RequiresAuthentication
   @GetMapping("blog/delete/{id}")
   public Result edit(@PathVariable(name = "id") Long id){
 

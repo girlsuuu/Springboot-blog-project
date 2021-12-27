@@ -31,7 +31,7 @@ public class Comment implements Serializable {
 
   private String userAvatar;
 
-  @JsonFormat(pattern = "yyyy-mm-dd")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
   private Date createTime;
 
   @NotNull(message = "内容不能为空")
