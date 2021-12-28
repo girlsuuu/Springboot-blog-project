@@ -1,13 +1,11 @@
 package com.blog.controller;
 
-
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.blog.common.lang.Result;
 import com.blog.entity.Blog;
-import com.blog.entity.Record;
 import com.blog.service.BlogService;
 import com.blog.service.RecordService;
 import com.blog.util.ShiroUtil;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,12 +36,24 @@ public class BlogController {
 
   @GetMapping("blogs")
   public Result list(@RequestParam(defaultValue = "1") Integer currentPage){
-    Page page = new Page(currentPage, 5);
+    Page<Blog> page = new Page<>(currentPage, 5);
     QueryWrapper<Blog> wrapper = new QueryWrapper<>();
     wrapper.eq("status", 1);
-    IPage pageData = blogService.page(page, wrapper.orderByDesc("created"));
+    IPage<Blog> pageData = blogService.page(page, wrapper.orderByDesc("created"));
     return Result.success(pageData);
   }
+
+  @GetMapping("blogsByUserId/{id}")
+  public Result listByUserId(@PathVariable(name = "id") Long id, @RequestParam(defaultValue = "1") Integer currentPage){
+    Page<Blog> page = new Page<>(currentPage, 6);
+    QueryWrapper<Blog> wrapper = new QueryWrapper<>();
+    wrapper.eq("user_id", id);
+    wrapper.eq("status", 1);
+    IPage<Blog> pageData = blogService.page(page, wrapper.orderByDesc("created"));
+    return Result.success(pageData);
+
+  }
+
 
   @GetMapping("blog/{id}")
   public Result detail(@PathVariable(name = "id") Long id) throws Exception {
@@ -59,32 +68,27 @@ public class BlogController {
   @PostMapping("blog/search")
   public Result search(@Validated @RequestBody String text){
     QueryWrapper<Blog> wrapper = new QueryWrapper<>();
+    wrapper.eq("status", 1);
     wrapper.like("title", text);
     List<Blog> blogs = blogService.list(wrapper);
     return Result.success(blogs);
   }
 
-
   @RequiresAuthentication
   @PostMapping("blog/edit")
   public Result edit(@Validated @RequestBody Blog blog){
-
     Blog temp = null;
     if(blog.getId() != null) {
       temp = blogService.getById(blog.getId());
       // 只能编辑自己的文章
 //      Assert.isTrue(temp.getUserId().longValue() == ShiroUtil.getProfile().getId().longValue(), "没有权限编辑");
-
     } else {
-
       temp = new Blog();
       temp.setUserId(ShiroUtil.getProfile().getId());
       temp.setCreated(LocalDateTime.now());
     }
-
     BeanUtil.copyProperties(blog, temp, "id", "userId", "created");
     blogService.saveOrUpdate(temp);
-
     return Result.success(null);
   }
 
@@ -93,10 +97,8 @@ public class BlogController {
   public Result edit(@PathVariable(name = "id") Long id){
 
     Blog temp = blogService.getById(id);
-
     temp.setStatus(0);
     blogService.saveOrUpdate(temp);
-
     return Result.success(null);
   }
 

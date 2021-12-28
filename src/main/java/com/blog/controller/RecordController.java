@@ -26,9 +26,7 @@ public class RecordController {
 
     QueryWrapper<Record> wrapper = new QueryWrapper<>();
     wrapper.eq("user_id", userId);
-
     List<Record> records= recordService.list(wrapper);
-
     return Result.success(records);
   }
 
@@ -38,12 +36,10 @@ public class RecordController {
     Date date = new Date();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     String simpleDate = sdf.format(date)+" 00:00:00";
-
     QueryWrapper<Record> wrapper = new QueryWrapper<>();
     wrapper.eq("user_id", userId);
     wrapper.eq("date", simpleDate);
     Record record = recordService.getOne(wrapper);
-
     if (record != null){
       record.setCount(record.getCount()+1);
       recordService.saveOrUpdate(record);

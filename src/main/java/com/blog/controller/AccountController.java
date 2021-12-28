@@ -33,15 +33,12 @@ public class AccountController {
   public Result login(@Validated @RequestBody LoginDto loginDto, HttpServletResponse response){
     User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
     Assert.notNull(user, "用户不存在");
-
     if(!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))){
       return Result.fail("密码不正确");
     }
-
     String jwt = jwtUtils.generateToken(user.getId());
     response.setHeader("Authorization", jwt);
     response.setHeader("Access-control-Expose-Headers", "Authorization");
-
     return Result.success(MapUtil.builder()
         .put("id", user.getId())
         .put("username", user.getUsername())
@@ -72,14 +69,12 @@ public class AccountController {
     userToSave.setPassword(SecureUtil.md5(signUpDto.getPassword()));
     userToSave.setEmail(signUpDto.getEmail());
     userService.save(userToSave);
-
     return Result.success("注册成功");
   }
 
   @RequiresAuthentication
   @GetMapping("logout")
   public Result logOut(){
-
     SecurityUtils.getSubject().logout();
     return Result.success(null);
   }

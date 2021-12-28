@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,17 +32,13 @@ public class CommentController {
   CommentService commentService;
 
   @GetMapping("comment/{id}")
-  public Result commentDetail(@PathVariable(name = "id") Long id){
+  public Result commentDetail(@PathVariable(name = "id") Long id, @RequestParam(defaultValue = "1") Integer currentPage){
 
-    IPage<Comment> page = new Page<>(1, 10);
+    IPage<Comment> page = new Page<>(currentPage, 10);
     QueryWrapper<Comment> wrapper=new QueryWrapper<>();
     wrapper.eq("blog_id", id);
-
-    IPage<Comment> list= commentService.page(page,wrapper);
-    //这里是实际查询出来的集合
-    List<Comment> gc=list.getRecords();
-
-    return Result.success(gc);
+    IPage<Comment> list= commentService.page(page,wrapper.orderByDesc("create_time"));
+    return Result.success(list);
   }
 
 
@@ -49,17 +46,12 @@ public class CommentController {
   public Result comment(@Validated @RequestBody CommentDO commentDO){
 
     Comment temp = new Comment();
-
-
     BeanUtil.copyProperties(commentDO, temp);
     temp.setCreateTime(new Date());
-
     Reply reply = new Reply();
     reply.setReplies(Collections.emptyList());
-
     temp.setReply(reply);
     commentService.save(temp);
-
     return Result.success(null);
   }
 
@@ -67,21 +59,17 @@ public class CommentController {
   public Result reply(@Validated @RequestBody ReplyDO replyDO){
 
     Reply.SingleReply temp = new Reply.SingleReply();
-
     BeanUtil.copyProperties(replyDO, temp);
     temp.setCreateTime(new Date());
-
     Comment comment = commentService.getById(replyDO.getCommentId());
     List<SingleReply> replyList = comment.getReply().getReplies();
     replyList.add(temp);
     comment.getReply().setReplies(replyList);
     String json= JSON.toJSONString(comment.getReply());
-
     UpdateWrapper updateWrapper = new UpdateWrapper();
     updateWrapper.eq("id", replyDO.getCommentId());
     updateWrapper.set("reply", json);
     commentService.update(comment, updateWrapper);
-
     return Result.success(null);
   }
 }
