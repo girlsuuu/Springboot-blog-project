@@ -16,6 +16,7 @@ import com.blog.service.CommentService;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
