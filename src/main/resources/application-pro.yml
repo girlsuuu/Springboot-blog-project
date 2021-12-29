@@ -9,6 +9,10 @@ spring:
     encoding:
       charset: utf-8
       force: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
 shiro-redis:
   enabled: true
   redis-manager:
