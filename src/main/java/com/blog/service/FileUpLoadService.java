@@ -2,8 +2,11 @@ package com.blog.service;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.*;
+import com.blog.common.lang.Result;
 import com.blog.config.Aliconfig;
 import com.blog.common.lang.FileUploadResult;
+import java.net.URL;
+import java.util.Date;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -16,6 +19,9 @@ import java.util.List;
 
 @Service
 public class FileUpLoadService {
+
+  @Autowired
+  UserService userService;
 
   // 允许上传的格式
   private static final String[] IMAGE_TYPE = new String[]{".bmp", ".jpg",
@@ -30,7 +36,7 @@ public class FileUpLoadService {
    * @param uploadFile
    * @return
    */
-  public FileUploadResult upload(MultipartFile uploadFile) {
+  public FileUploadResult upload(MultipartFile uploadFile, Long id) {
     // 校验图片格式
     boolean isLegal = false;
     for (String type : IMAGE_TYPE) {
@@ -64,6 +70,11 @@ public class FileUpLoadService {
     //this.aliyunConfig.getUrlPrefix() + filePath 文件路径需要保存到数据库
     fileUploadResult.setName(this.aliyunConfig.getUrlPrefix() + filePath);
     fileUploadResult.setUid(String.valueOf(System.currentTimeMillis()));
+
+    //改数据库
+    String newFileName = filePath.replaceAll("/", "_");
+    userService.updateAvatar(id, newFileName);
+
     return fileUploadResult;
   }
 
@@ -131,5 +142,11 @@ public class FileUpLoadService {
     if (in != null) {
       in.close();
     }
+  }
+
+  public Result getUrl(String objectName) {
+    Date expiration = new Date(new Date().getTime() + 3600 * 1000);
+    URL url = ossClient.generatePresignedUrl(aliyunConfig.getBucketName(), objectName, expiration);
+    return Result.success("https://"+url.getAuthority()+url.getFile());
   }
 }

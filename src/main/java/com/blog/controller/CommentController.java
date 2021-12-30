@@ -16,6 +16,7 @@ import com.blog.service.CommentService;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -39,7 +40,8 @@ public class CommentController {
     QueryWrapper<Comment> wrapper=new QueryWrapper<>();
     wrapper.eq("blog_id", id);
     IPage<Comment> list= commentService.page(page,wrapper.orderByDesc("create_time"));
-    return Result.success(list);
+    List<CommentDO> record = list.getRecords().stream().map(CommentDO::new).collect(Collectors.toList());
+    return Result.success(record);
   }
 
 

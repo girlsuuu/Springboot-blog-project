@@ -1,10 +1,12 @@
 package com.blog.controller;
 
 import com.aliyun.oss.model.OSSObjectSummary;
+import com.blog.common.lang.Result;
 import com.blog.service.FileUpLoadService;
 import com.blog.common.lang.FileUploadResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,9 +31,9 @@ public class FileUploadController {
    */
   @RequestMapping("file/upload")
   @ResponseBody
-  public FileUploadResult upload(@RequestParam("file") MultipartFile uploadFile)
+  public FileUploadResult upload(@RequestParam("file") MultipartFile uploadFile, @RequestParam("id") Long id)
       throws Exception {
-    return fileUploadService.upload(uploadFile);
+    return fileUploadService.upload(uploadFile, id);
   }
 
   /**
@@ -40,7 +42,7 @@ public class FileUploadController {
    * @return
    * @throws Exception
    */
-  @RequestMapping("file/delete")
+  @RequestMapping("/file/delete")
   @ResponseBody
   public FileUploadResult delete(@RequestParam("fileName") String objectName)
       throws Exception {
@@ -73,6 +75,13 @@ public class FileUploadController {
     response.setHeader("Content-Disposition",
         "attachment;filename=" + new String(objectName.getBytes(), "ISO-8859-1"));
     fileUploadService.exportOssFile(response.getOutputStream(),objectName);
+  }
+
+  @RequestMapping("file/getUrl/{fileName}")
+  @ResponseBody
+  public Result getUrl(@PathVariable(name = "fileName") String fileName) {
+    String path = fileName.replaceAll("_", "/");
+    return fileUploadService.getUrl(path);
   }
 
 

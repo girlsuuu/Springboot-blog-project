@@ -12,7 +12,7 @@ public class Result implements Serializable {
   private Object data;
 
   public static Result success(Object data){
-    return success(200, "操作成功1", data);
+    return success(200, "操作成功", data);
   }
 
 
