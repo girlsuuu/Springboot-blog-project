@@ -46,10 +46,10 @@ public class CommentController {
 
 
   @PostMapping("comment/comment")
-  public Result comment(@Validated @RequestBody CommentDO commentDO){
+  public Result comment(@Validated @RequestBody Comment comment){
 
     Comment temp = new Comment();
-    BeanUtil.copyProperties(commentDO, temp);
+    BeanUtil.copyProperties(comment, temp);
     temp.setCreateTime(new Date());
     Reply reply = new Reply();
     reply.setReplies(Collections.emptyList());

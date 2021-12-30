@@ -9,9 +9,10 @@ import lombok.Data;
 public class CommentDO {
 
   public CommentDO(Comment comment){
-    BeanUtil.copyProperties(comment, this, "id");
+    BeanUtil.copyProperties(comment, this);
     this.setUserAvatar("");
   }
+  private Long id;
   private Long blogId;
   private String createUser;
   private String userAvatar;
