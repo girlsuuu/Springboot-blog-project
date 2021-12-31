@@ -23,27 +23,27 @@ public class UserController {
 
   @RequiresAuthentication
   @GetMapping("/index")
-  public Object index(){
+  public Object index() {
     User user = userService.getById(1L);
 
     return Result.success(user);
   }
 
   @GetMapping("/getUser/{id}")
-  public Object getUser(@PathVariable(name = "id") Long id){
+  public Object getUser(@PathVariable(name = "id") Long id) {
     User user = userService.getById(id);
 
     return Result.success(user);
   }
 
   @PostMapping("/save")
-  public Object save(@Validated @RequestBody User user){
+  public Object save(@Validated @RequestBody User user) {
 
     return Result.success(user);
   }
 
   @GetMapping("/getUserByName/{username}")
-  public Object getUserByName(@PathVariable(name = "username") String username){
+  public Object getUserByName(@PathVariable(name = "username") String username) {
 
     QueryWrapper<User> wrapper = new QueryWrapper<>();
     wrapper.eq("username", username);

@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReplyDO {
+
   private Long commentId;
   private String content;
   private String createUser;

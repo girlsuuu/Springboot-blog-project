@@ -7,6 +7,7 @@ import com.blog.service.CommentService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
+public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements
+    CommentService {
 
 }

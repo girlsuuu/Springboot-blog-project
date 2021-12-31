@@ -32,7 +32,8 @@ public class FileUpLoadService {
   private Aliconfig aliyunConfig;
 
   /**
-   *  文件上传
+   * 文件上传
+   *
    * @param uploadFile
    * @return
    */
@@ -79,7 +80,8 @@ public class FileUpLoadService {
   }
 
   /**
-   *  通过源文件获取 路径和文件名
+   * 通过源文件获取 路径和文件名
+   *
    * @param sourceFileName
    * @return
    */
@@ -94,13 +96,15 @@ public class FileUpLoadService {
 
   /**
    * 查看文件列表
+   *
    * @return
    */
   public List<OSSObjectSummary> list() {
     // 设置最大个数。
     final int maxKeys = 200;
     // 列举文件。
-    ObjectListing objectListing = ossClient.listObjects(new ListObjectsRequest(aliyunConfig.getBucketName()).withMaxKeys(maxKeys));
+    ObjectListing objectListing = ossClient.listObjects(
+        new ListObjectsRequest(aliyunConfig.getBucketName()).withMaxKeys(maxKeys));
     List<OSSObjectSummary> sums = objectListing.getObjectSummaries();
     return sums;
   }
@@ -119,7 +123,8 @@ public class FileUpLoadService {
   }
 
   /**
-   *   下载文件
+   * 下载文件
+   *
    * @param os
    * @param objectName
    * @throws IOException
@@ -147,6 +152,6 @@ public class FileUpLoadService {
   public Result getUrl(String objectName) {
     Date expiration = new Date(new Date().getTime() + 3600 * 1000);
     URL url = ossClient.generatePresignedUrl(aliyunConfig.getBucketName(), objectName, expiration);
-    return Result.success("https://"+url.getAuthority()+url.getFile());
+    return Result.success("https://" + url.getAuthority() + url.getFile());
   }
 }

@@ -18,7 +18,8 @@ public class Reply implements Serializable {
   @AllArgsConstructor
   @NoArgsConstructor
   @Data
-  public static class SingleReply{
+  public static class SingleReply {
+
     private String content;
     private Date createTime;
     private String createUser;

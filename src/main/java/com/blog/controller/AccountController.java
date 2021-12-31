@@ -30,10 +30,10 @@ public class AccountController {
   JwtUtils jwtUtils;
 
   @PostMapping("/login")
-  public Result login(@Validated @RequestBody LoginDto loginDto, HttpServletResponse response){
+  public Result login(@Validated @RequestBody LoginDto loginDto, HttpServletResponse response) {
     User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
     Assert.notNull(user, "用户不存在");
-    if(!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))){
+    if (!user.getPassword().equals(SecureUtil.md5(loginDto.getPassword()))) {
       return Result.fail("密码不正确");
     }
     String jwt = jwtUtils.generateToken(user.getId());
@@ -50,17 +50,18 @@ public class AccountController {
 
   @PostMapping("/signUp")
   public Result signUp(@Validated @RequestBody SignUpDto signUpDto) {
-    if(signUpDto.getUsername().equals("") || signUpDto.getUsername()==null){
+    if (signUpDto.getUsername().equals("") || signUpDto.getUsername() == null) {
       return Result.fail("用户名不能为空");
     }
-    if(signUpDto.getPassword().equals("") || signUpDto.getPassword()==null){
+    if (signUpDto.getPassword().equals("") || signUpDto.getPassword() == null) {
       return Result.fail("密码不能为空");
     }
-    if(signUpDto.getEmail().equals("") || signUpDto.getEmail()==null){
+    if (signUpDto.getEmail().equals("") || signUpDto.getEmail() == null) {
       return Result.fail("邮箱不能为空");
     }
-    User user = userService.getOne(new QueryWrapper<User>().eq("username", signUpDto.getUsername()));
-    if(user != null){
+    User user = userService.getOne(
+        new QueryWrapper<User>().eq("username", signUpDto.getUsername()));
+    if (user != null) {
       return Result.fail("用户已存在");
     }
     //存用户
@@ -74,7 +75,7 @@ public class AccountController {
 
   @RequiresAuthentication
   @GetMapping("logout")
-  public Result logOut(){
+  public Result logOut() {
     SecurityUtils.getSubject().logout();
     return Result.success(null);
   }

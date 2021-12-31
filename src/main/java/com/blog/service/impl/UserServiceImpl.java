@@ -12,6 +12,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
   @Autowired
   UserService userService;
+
   @Override
   public void updateAvatar(Long id, String filePath) {
     User user = userService.getById(id);

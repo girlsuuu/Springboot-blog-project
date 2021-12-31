@@ -15,6 +15,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName(value = "record")
 public class Record implements Serializable {
+
   private static final long serialVersionUID = 1L;
 
   @TableId(value = "id", type = IdType.AUTO)
@@ -24,9 +25,8 @@ public class Record implements Serializable {
 
   private Long count;
 
-  @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+  @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
   private Date date;
-
 
 
 }

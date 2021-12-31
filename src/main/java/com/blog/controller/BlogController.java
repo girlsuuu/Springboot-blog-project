@@ -35,7 +35,7 @@ public class BlogController {
   RecordService recordService;
 
   @GetMapping("blogs")
-  public Result list(@RequestParam(defaultValue = "1") Integer currentPage){
+  public Result list(@RequestParam(defaultValue = "1") Integer currentPage) {
     Page<Blog> page = new Page<>(currentPage, 5);
     QueryWrapper<Blog> wrapper = new QueryWrapper<>();
     wrapper.eq("status", 1);
@@ -44,7 +44,8 @@ public class BlogController {
   }
 
   @GetMapping("blogsByUserId/{id}")
-  public Result listByUserId(@PathVariable(name = "id") Long id, @RequestParam(defaultValue = "1") Integer currentPage){
+  public Result listByUserId(@PathVariable(name = "id") Long id,
+      @RequestParam(defaultValue = "1") Integer currentPage) {
     Page<Blog> page = new Page<>(currentPage, 6);
     QueryWrapper<Blog> wrapper = new QueryWrapper<>();
     wrapper.eq("user_id", id);
@@ -59,14 +60,14 @@ public class BlogController {
   public Result detail(@PathVariable(name = "id") Long id) throws Exception {
     Blog blog = blogService.getById(id);
     Assert.notNull(blog, "该博客不存在");
-    if(blog.getStatus() == 0){
+    if (blog.getStatus() == 0) {
       return Result.fail("博客不存在");
     }
     return Result.success(blog);
   }
 
   @PostMapping("blog/search")
-  public Result search(@Validated @RequestBody String text){
+  public Result search(@Validated @RequestBody String text) {
     QueryWrapper<Blog> wrapper = new QueryWrapper<>();
     wrapper.eq("status", 1);
     wrapper.like("title", text);
@@ -76,9 +77,9 @@ public class BlogController {
 
   @RequiresAuthentication
   @PostMapping("blog/edit")
-  public Result edit(@Validated @RequestBody Blog blog){
+  public Result edit(@Validated @RequestBody Blog blog) {
     Blog temp = null;
-    if(blog.getId() != null) {
+    if (blog.getId() != null) {
       temp = blogService.getById(blog.getId());
       // 只能编辑自己的文章
 //      Assert.isTrue(temp.getUserId().longValue() == ShiroUtil.getProfile().getId().longValue(), "没有权限编辑");
@@ -94,7 +95,7 @@ public class BlogController {
 
   @RequiresAuthentication
   @GetMapping("blog/delete/{id}")
-  public Result edit(@PathVariable(name = "id") Long id){
+  public Result edit(@PathVariable(name = "id") Long id) {
 
     Blog temp = blogService.getById(id);
     temp.setStatus(0);

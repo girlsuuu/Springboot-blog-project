@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.blog.common.lang.PageRes;
 import com.blog.common.lang.Result;
 import com.blog.entity.Comment;
 import com.blog.entity.CommentDO;
@@ -40,8 +41,10 @@ public class CommentController {
     QueryWrapper<Comment> wrapper=new QueryWrapper<>();
     wrapper.eq("blog_id", id);
     IPage<Comment> list= commentService.page(page,wrapper.orderByDesc("create_time"));
-    List<CommentDO> record = list.getRecords().stream().map(CommentDO::new).collect(Collectors.toList());
-    return Result.success(record);
+    List<CommentDO> records = list.getRecords().stream().map(CommentDO::new).collect(Collectors.toList());
+    PageRes<CommentDO> res = new PageRes<>(records, list.getTotal(), list.getSize(),
+        list.getCurrent());
+    return Result.success(res);
   }
 
 

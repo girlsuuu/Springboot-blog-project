@@ -20,28 +20,27 @@ import lombok.experimental.Accessors;
 @TableName("m_blog")
 public class Blog implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+  @TableId(value = "id", type = IdType.AUTO)
+  private Long id;
 
-    private Long userId;
+  private Long userId;
 
-    @NotNull(message = "标题不能为空")
-    private String title;
+  @NotNull(message = "标题不能为空")
+  private String title;
 
-    @NotNull(message = "描述不能为空")
-    private String description;
+  @NotNull(message = "描述不能为空")
+  private String description;
 
-    @NotNull(message = "内容不能为空")
-    private String content;
+  @NotNull(message = "内容不能为空")
+  private String content;
 
-    @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private LocalDateTime created;
+  @TableField(fill = FieldFill.INSERT)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  private LocalDateTime created;
 
-    private Integer status;
-
+  private Integer status;
 
 
 }

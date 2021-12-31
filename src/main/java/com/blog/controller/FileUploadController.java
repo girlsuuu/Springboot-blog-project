@@ -25,19 +25,22 @@ public class FileUploadController {
 
   /**
    * 文件上传到oss
+   *
    * @param uploadFile
    * @return
    * @throws Exception
    */
   @RequestMapping("file/upload")
   @ResponseBody
-  public FileUploadResult upload(@RequestParam("file") MultipartFile uploadFile, @RequestParam("id") Long id)
+  public FileUploadResult upload(@RequestParam("file") MultipartFile uploadFile,
+      @RequestParam("id") Long id)
       throws Exception {
     return fileUploadService.upload(uploadFile, id);
   }
 
   /**
    * 根据文件名删除
+   *
    * @param objectName
    * @return
    * @throws Exception
@@ -51,7 +54,8 @@ public class FileUploadController {
 
 
   /**
-   *  查看桶内所有文件
+   * 查看桶内所有文件
+   *
    * @return
    * @throws Exception
    */
@@ -63,18 +67,20 @@ public class FileUploadController {
   }
 
   /**
-   *  根据文件名进行下载
+   * 根据文件名进行下载
+   *
    * @param objectName
    * @param response
    * @throws IOException
    */
   @RequestMapping("file/download")
   @ResponseBody
-  public void download(@RequestParam("fileName") String objectName, HttpServletResponse response) throws IOException {
+  public void download(@RequestParam("fileName") String objectName, HttpServletResponse response)
+      throws IOException {
     //通知浏览器以附件形式下载
     response.setHeader("Content-Disposition",
         "attachment;filename=" + new String(objectName.getBytes(), "ISO-8859-1"));
-    fileUploadService.exportOssFile(response.getOutputStream(),objectName);
+    fileUploadService.exportOssFile(response.getOutputStream(), objectName);
   }
 
   @RequestMapping("file/getUrl/{fileName}")

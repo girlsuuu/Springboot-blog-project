@@ -17,36 +17,36 @@ import lombok.experimental.Accessors;
 @TableName("m_user")
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public User() {
-        this.avatar = "";
-        this.status = 0;
-        this.created = new Date();
-        this.lastLogin = null;
-    }
+  public User() {
+    this.avatar = "";
+    this.status = 0;
+    this.created = new Date();
+    this.lastLogin = null;
+  }
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+  @TableId(value = "id", type = IdType.AUTO)
+  private Long id;
 
-    @NotNull(message = "昵称不能为空")
-    private String username;
+  @NotNull(message = "昵称不能为空")
+  private String username;
 
-    private String avatar;
+  private String avatar;
 
-    @NotNull(message = "邮箱不能为空")
-    @Email(message = "邮箱格式不正确")
-    private String email;
+  @NotNull(message = "邮箱不能为空")
+  @Email(message = "邮箱格式不正确")
+  private String email;
 
-    private String password;
+  private String password;
 
-    private Integer status;
+  private Integer status;
 
-    private Date created;
+  private Date created;
 
-    private Date lastLogin;
+  private Date lastLogin;
 
-    private Integer isAdmin;
+  private Integer isAdmin;
 
 
 }
