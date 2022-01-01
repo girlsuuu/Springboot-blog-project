@@ -27,7 +27,9 @@ public class Comment implements Serializable {
 
   private Long blogId;
 
-  private String createUser;
+  private Long createUserId;
+
+//  private String createUser;
 
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
   private Date createTime;

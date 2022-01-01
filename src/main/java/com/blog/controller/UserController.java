@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -49,5 +50,20 @@ public class UserController {
     wrapper.eq("username", username);
     User user = userService.getOne(wrapper);
     return Result.success(user);
+  }
+
+  @GetMapping("/editUsername/{id}")
+  public Object editUsername(@PathVariable(name = "id") Long id, @RequestParam(name = "username") String username){
+
+    User user = userService.getOne(
+        new QueryWrapper<User>().eq("username", username));
+    if (user != null) {
+      return Result.fail("用户名已存在");
+    } else {
+      User userToSave = userService.getById(id);
+      userToSave.setUsername(username);
+      userService.saveOrUpdate(userToSave);
+    }
+    return Result.success(null);
   }
 }
