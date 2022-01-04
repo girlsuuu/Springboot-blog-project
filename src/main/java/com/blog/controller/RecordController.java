@@ -6,12 +6,17 @@ import com.blog.entity.Record;
 import com.blog.service.RecordService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,30 +32,38 @@ public class RecordController {
     QueryWrapper<Record> wrapper = new QueryWrapper<>();
     wrapper.eq("user_id", userId);
     List<Record> records = recordService.list(wrapper);
-    return Result.success(records);
+    List<Map<String, String>> countList = new ArrayList<>();
+    Map<String, Integer> countMap = new HashMap<>();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    records.forEach(i -> {
+      String date = sdf.format(i.getDate());
+      if (!countMap.containsKey(date)) {
+        countMap.put(date, 1);
+      } else {
+        countMap.put(date, countMap.get(date) + 1);
+      }
+    });
+    countMap.forEach((k, v) -> {
+      Map<String, String> newMap = new HashMap<>();
+      newMap.put("date", k);
+      newMap.put("count", v.toString());
+      countList.add(newMap);
+    });
+    return Result.success(countList);
   }
 
   @GetMapping("/records/add/{userId}")
-  public Result add(@PathVariable(name = "userId") Long userId) throws ParseException {
+  public Result add(@PathVariable(name = "userId") Long userId, @RequestParam("type") String type) throws ParseException {
 
     Date date = new Date();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    String simpleDate = sdf.format(date) + " 00:00:00";
-    QueryWrapper<Record> wrapper = new QueryWrapper<>();
-    wrapper.eq("user_id", userId);
-    wrapper.eq("date", simpleDate);
-    Record record = recordService.getOne(wrapper);
-    if (record != null) {
-      record.setCount(record.getCount() + 1);
-      recordService.saveOrUpdate(record);
-    } else {
-      Record temp = new Record();
-      temp.setUserId(userId);
-      temp.setDate(sdf.parse(simpleDate));
-      recordService.save(temp);
-    }
-
-    return Result.success(record);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String simpleDate = sdf.format(date);
+    Record temp = new Record();
+    temp.setUserId(userId);
+    temp.setType(type);
+    temp.setDate(sdf.parse(simpleDate));
+    recordService.save(temp);
+    return Result.success(temp);
 
   }
 
