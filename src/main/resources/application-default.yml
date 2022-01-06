@@ -11,6 +11,11 @@ spring:
       max-request-size: 100MB
   mvc:
     static-path-pattern: /**
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+
 
 shiro-redis:
   enabled: true

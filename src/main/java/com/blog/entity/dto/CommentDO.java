@@ -1,6 +1,8 @@
-package com.blog.entity;
+package com.blog.entity.dto;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.blog.entity.Comment;
+import com.blog.entity.Reply;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 import lombok.Data;
