@@ -35,5 +35,4 @@ public class UserLikes implements Serializable {
   private Date updateTime;
 
   private Integer status;
-
 }

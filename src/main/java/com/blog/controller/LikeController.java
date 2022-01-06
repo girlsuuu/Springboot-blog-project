@@ -84,6 +84,4 @@ public class LikeController {
     redisTemplate.opsForHash().put(RedisKeyUtils.MAP_KEY_USER_LIKED, likedKey, "0");
   }
 
-
-
 }

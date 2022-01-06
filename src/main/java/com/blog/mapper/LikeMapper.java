@@ -6,3 +6,4 @@ import com.blog.entity.UserLikes;
 public interface LikeMapper extends BaseMapper<UserLikes> {
 
 }
+
