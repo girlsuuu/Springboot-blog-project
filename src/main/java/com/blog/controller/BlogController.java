@@ -8,11 +8,17 @@ import com.blog.common.lang.Result;
 import com.blog.entity.Blog;
 import com.blog.service.BlogService;
 import com.blog.service.RecordService;
+import com.blog.util.RedisKeyUtils;
+import com.blog.util.SerializeUtils;
 import com.blog.util.ShiroUtil;
+import com.google.gson.Gson;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
+
 @RestController
 @RequestMapping(produces = "application/json;charset=UTF-8")
 public class BlogController {
@@ -33,6 +40,9 @@ public class BlogController {
 
   @Autowired
   RecordService recordService;
+
+  @Autowired
+  RedisTemplate redisTemplate;
 
   @GetMapping("blogs")
   public Result list(@RequestParam(defaultValue = "1") Integer currentPage) {
@@ -55,6 +65,40 @@ public class BlogController {
 
   }
 
+  @GetMapping("blog/addFavorite")
+  public Result addFavorite(@RequestParam("userId") Long userId, @RequestParam("blogId") Long blogId) {
+    Gson gson = new Gson();
+    if (redisTemplate.opsForHash().hasKey(RedisKeyUtils.FAVORITE_BLOGS, userId)) {
+      String json = redisTemplate.opsForHash().get(RedisKeyUtils.FAVORITE_BLOGS, userId).toString();
+      List<String> data = gson.fromJson(json, List.class);
+      if(data.contains(blogId+"")){
+        return Result.fail("重复添加");
+      }
+      data.add(blogId+"");
+      redisTemplate.opsForHash().put(RedisKeyUtils.FAVORITE_BLOGS, userId, gson.toJson(data));
+      return Result.success("add");
+    }
+    List<String> data = new ArrayList<>();
+    data.add(blogId+"");
+    redisTemplate.opsForHash().put(RedisKeyUtils.FAVORITE_BLOGS, userId, gson.toJson(data));
+    return Result.success("add");
+  }
+
+  @GetMapping("blog/rmFavorite")
+  public Result rmFavorite(@RequestParam("userId") Long userId, @RequestParam("blogId") Long blogId) {
+    Gson gson = new Gson();
+    if (redisTemplate.opsForHash().hasKey(RedisKeyUtils.FAVORITE_BLOGS, userId)) {
+      String json = redisTemplate.opsForHash().get(RedisKeyUtils.FAVORITE_BLOGS, userId).toString();
+      List<String> data = gson.fromJson(json, List.class);
+      if(!data.contains(blogId+"")){
+        return Result.fail("重复删除");
+      }
+      data.remove(blogId+"");
+      redisTemplate.opsForHash().put(RedisKeyUtils.FAVORITE_BLOGS, userId, gson.toJson(data));
+      return Result.success("rm");
+    }
+    return Result.fail("505");
+  }
 
   @GetMapping("blog/{id}")
   public Result detail(@PathVariable(name = "id") Long id) throws Exception {

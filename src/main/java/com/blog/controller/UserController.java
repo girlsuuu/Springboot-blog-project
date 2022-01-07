@@ -4,8 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.blog.common.lang.Result;
 import com.blog.entity.User;
 import com.blog.service.UserService;
+import com.blog.util.RedisKeyUtils;
+import com.google.gson.Gson;
+import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +25,9 @@ public class UserController {
 
   @Autowired
   UserService userService;
+
+  @Autowired
+  RedisTemplate redisTemplate;
 
   @RequiresAuthentication
   @GetMapping("/index")
@@ -66,4 +73,13 @@ public class UserController {
     }
     return Result.success(null);
   }
+
+  @GetMapping("/getFavorite/{id}")
+  public Object getFavorite(@PathVariable(name = "id") Long id) {
+    Gson gson = new Gson();
+    String json = redisTemplate.opsForHash().get(RedisKeyUtils.FAVORITE_BLOGS, id).toString();
+    List<String> data = gson.fromJson(json, List.class);
+    return Result.success(data);
+  }
+
 }
