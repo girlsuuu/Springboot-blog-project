@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -117,6 +118,16 @@ public class BlogController {
     wrapper.like("title", text);
     List<Blog> blogs = blogService.list(wrapper);
     return Result.success(blogs);
+  }
+
+  @PostMapping("blog/listByIds")
+  public Result listByIds(@RequestParam(defaultValue = "1") Integer currentPage, @RequestBody List<String> ids) {
+    Page<Blog> page = new Page<>(currentPage, 6);
+    QueryWrapper<Blog> wrapper = new QueryWrapper<>();
+    List<Long> longIds = ids.stream().map(Long::parseLong).collect(Collectors.toList());
+    wrapper.in("id", longIds);
+    IPage<Blog> pageData = blogService.page(page, wrapper.orderByDesc("created"));
+    return Result.success(pageData);
   }
 
   @RequiresAuthentication

@@ -6,6 +6,7 @@ import com.blog.entity.User;
 import com.blog.service.UserService;
 import com.blog.util.RedisKeyUtils;
 import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,10 +77,13 @@ public class UserController {
 
   @GetMapping("/getFavorite/{id}")
   public Object getFavorite(@PathVariable(name = "id") Long id) {
-    Gson gson = new Gson();
-    String json = redisTemplate.opsForHash().get(RedisKeyUtils.FAVORITE_BLOGS, id).toString();
-    List<String> data = gson.fromJson(json, List.class);
-    return Result.success(data);
+    if (redisTemplate.opsForHash().hasKey(RedisKeyUtils.FAVORITE_BLOGS, id)) {
+      Gson gson = new Gson();
+      String json = redisTemplate.opsForHash().get(RedisKeyUtils.FAVORITE_BLOGS, id).toString();
+      List<String> data = gson.fromJson(json, List.class);
+      return Result.success(data);
+    }
+    return Result.success(new ArrayList<String>());
   }
 
 }
