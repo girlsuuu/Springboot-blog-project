@@ -5,6 +5,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.blog.common.dto.LoginDto;
+import com.blog.common.dto.ResetPasswordDto;
 import com.blog.common.dto.SignUpDto;
 import com.blog.common.lang.Result;
 import com.blog.entity.User;
@@ -71,6 +72,21 @@ public class AccountController {
     userToSave.setEmail(signUpDto.getEmail());
     userService.save(userToSave);
     return Result.success("注册成功");
+  }
+
+  @PostMapping("/resetPassword")
+  public Result resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
+    User user = userService.getOne(new QueryWrapper<User>().eq("username", resetPasswordDto.getUsername()));
+    Assert.notNull(user, "用户名不存在");
+    if (!user.getPassword().equals(SecureUtil.md5(resetPasswordDto.getPassword()))) {
+      return Result.fail("原密码不正确");
+    }
+    if (user.getPassword().equals(SecureUtil.md5(resetPasswordDto.getNewPassword()))) {
+      return Result.fail("原密码与新密码相同");
+    }
+    user.setPassword(SecureUtil.md5(resetPasswordDto.getNewPassword()));
+    userService.saveOrUpdate(user);
+    return Result.success("修改成功");
   }
 
   @RequiresAuthentication
