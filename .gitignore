@@ -40,4 +40,4 @@ out/
 */.DS_Store
 .src/out
 
-.src/main/resources/aliyun.properties
+aliyun.properties
