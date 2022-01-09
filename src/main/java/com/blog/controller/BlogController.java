@@ -158,5 +158,20 @@ public class BlogController {
     return Result.success(null);
   }
 
+  @GetMapping("blog/editClass/{id}")
+  public Result editClass(@PathVariable(name = "id") Long id, @RequestParam(name = "class") String classification){
+    Blog temp = blogService.getById(id);
+    temp.setClassification(classification);
+    blogService.saveOrUpdate(temp);
+    return Result.success(null);
+  }
+
+  @GetMapping("blog/getClassedBlogs")
+  public Result getClassedBlogs(@RequestParam(name = "class") String classification){
+    List<Blog> temp = blogService.list(new QueryWrapper<Blog>().eq("classification", classification));
+    return Result.success(temp);
+  }
+
+
 
 }

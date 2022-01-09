@@ -39,3 +39,5 @@ src/out
 out/
 */.DS_Store
 .src/out
+
+.src/main/resources/aliyun.properties
