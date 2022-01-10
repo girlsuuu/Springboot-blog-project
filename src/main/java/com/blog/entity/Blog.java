@@ -36,6 +36,8 @@ public class Blog implements Serializable {
   @NotNull(message = "内容不能为空")
   private String content;
 
+  private String contentMarkdown;
+
   @TableField(fill = FieldFill.INSERT)
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
   private LocalDateTime created;
