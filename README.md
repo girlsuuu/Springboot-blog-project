@@ -2,6 +2,8 @@
 
 前端仓库: [blog-fe](https://github.com/Xinjiann/blog-fe)
 
+项目地址: [http://47.104.92.236/blogs](http://47.104.92.236/blogs)
+
 ## 使用技术：
 
 - 前端：Vue/ElementUI/Axios
