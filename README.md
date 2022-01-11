@@ -15,6 +15,9 @@
 #### 博客主页
 ![](https://github.com/Xinjiann/Springboot-blog-project/blob/main/img/%E6%95%88%E6%9E%9C1.png)
 
+#### 博客详情页
+![](https://github.com/Xinjiann/Springboot-blog-project/blob/main/img/%E6%95%88%E6%9E%9C4.png)
+
 #### 个人主页
 ![](https://github.com/Xinjiann/Springboot-blog-project/blob/main/img/%E6%95%88%E6%9E%9C2.png)
 
