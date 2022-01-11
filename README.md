@@ -10,6 +10,10 @@
 
 - 后台：MybatisPlus/shiro/jwt/Mysql/redis/SpringBoot
 
+## 效果展示:
+
+![]()
+
 ## 开发方式简述：
 
 - 前端
