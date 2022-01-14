@@ -45,6 +45,12 @@ public class UserController {
     return Result.success(user);
   }
 
+  @PostMapping("/getUsers")
+  public Object getUsers(@RequestBody List<String> ids){
+    List<User> users = userService.list(new QueryWrapper<User>().in("id", ids));
+    return Result.success(users);
+  }
+
   @PostMapping("/save")
   public Object save(@Validated @RequestBody User user) {
 

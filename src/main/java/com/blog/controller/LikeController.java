@@ -2,7 +2,6 @@ package com.blog.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.blog.common.lang.Result;
-import com.blog.config.RedisConfig;
 import com.blog.entity.UserLikes;
 import com.blog.service.LikeService;
 import com.blog.util.RedisKeyUtils;

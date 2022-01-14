@@ -15,6 +15,14 @@ public class RedisKeyUtils {
    */
   public static final String MAP_KEY_USER_LIKED_COUNT = "MAP_USER_LIKED_COUNT";
 
+  public static final String MAP_KEY_USER_FOLLOWED = "MAP_KEY_USER_FOLLOWED";
+
+  public static final String MAP_KEY_USER_FOLLOWER = "MAP_KEY_USER_FOLLOWER";
+
+  public static final String MAP_KEY_USER_FOLLOWED_COUNT = "MAP_KEY_USER_FOLLOWED_COUNT";
+
+  public static final String MAP_KEY_USER_FOLLOWER_COUNT = "MAP_KEY_USER_FOLLOWER_COUNT";
+
   public static final String FAVORITE_BLOGS = "FAVORITE_BLOGS";
 
   /**
