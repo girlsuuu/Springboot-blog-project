@@ -39,6 +39,7 @@ public class CommentController {
     IPage<Comment> page = new Page<>(currentPage, 10);
     QueryWrapper<Comment> wrapper=new QueryWrapper<>();
     wrapper.eq("blog_id", id);
+    wrapper.eq("status", 1);
     IPage<Comment> list= commentService.page(page,wrapper.orderByDesc("create_time"));
     List<CommentDO> records = list.getRecords().stream().map(CommentDO::new).collect(Collectors.toList());
     PageRes<CommentDO> res = new PageRes<>(records, list.getTotal(), list.getSize(),
@@ -57,6 +58,14 @@ public class CommentController {
     reply.setReplies(Collections.emptyList());
     temp.setReply(reply);
     commentService.save(temp);
+    return Result.success(null);
+  }
+
+  @GetMapping("comment/delete")
+  public Result commentDel(@RequestParam("id") Integer id) {
+    Comment comment = commentService.getById(id);
+    comment.setStatus(0);
+    commentService.saveOrUpdate(comment);
     return Result.success(null);
   }
 

@@ -40,4 +40,6 @@ public class Comment implements Serializable {
 
   private Long likes;
 
+  private Integer status;
+
 }
