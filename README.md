@@ -6,7 +6,7 @@
 
 国内访问：[http://47.104.92.236/blogs](http://47.104.92.236/blogs)
 
-国外访问：[www.helloworld-blog.co.uk](www.helloworld-blog.co.uk)
+国外访问：[www.helloworld-blog.co.uk](http://www.helloworld-blog.co.uk)
 
 初始账号密码：guest
 
