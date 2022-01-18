@@ -2,7 +2,13 @@
 
 前端仓库: [blog-fe](https://github.com/Xinjiann/blog-fe)
 
-项目地址: [http://47.104.92.236/blogs](http://47.104.92.236/blogs)
+项目地址: 
+
+国内访问：[http://47.104.92.236/blogs](http://47.104.92.236/blogs)
+
+国外访问：[www.helloworld-blog.co.uk](www.helloworld-blog.co.uk)
+
+初始账号密码：guest
 
 ## 使用技术：
 
